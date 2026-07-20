@@ -1,0 +1,11 @@
+# Laravel
+backend/vendor/
+backend/.env
+
+# Next.js
+frontend/node_modules/
+frontend/.next/
+
+# OS
+.DS_Store
+Thumbs.db
