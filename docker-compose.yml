@@ -21,6 +21,9 @@ services:
       dockerfile: docker/backend/Dockerfile
     container_name: ai-tools-backend
     restart: unless-stopped
+    volumes:
+      - ./backend:/var/www/html
+      - /var/www/html/vendor
     depends_on:
       - mysql
     networks:
@@ -32,6 +35,9 @@ services:
       dockerfile: docker/frontend/Dockerfile
     container_name: ai-tools-frontend
     restart: unless-stopped
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
     networks:
