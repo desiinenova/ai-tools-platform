@@ -1,3 +1,6 @@
+# Docker Compose
+/.env
+
 # Laravel
 backend/vendor/
 backend/.env
