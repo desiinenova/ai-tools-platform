@@ -1,0 +1,112 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Category;
+use App\Models\Role;
+use App\Models\Tag;
+use App\Models\Tool;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
+
+class ToolControllerTest extends TestCase
+{
+    use RefreshDatabase;
+
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $role = Role::create(['name' => 'owner']);
+        $this->user = User::factory()->create(['role_id' => $role->id]);
+    }
+
+    public function test_roles_endpoint_lists_roles(): void
+    {
+        Role::create(['name' => 'backend']);
+
+        $response = $this->actingAs($this->user)->getJson('/api/roles');
+
+        $response->assertOk();
+        $response->assertJsonCount(2, 'data');
+        $response->assertJsonFragment(['name' => 'backend']);
+    }
+
+    public function test_it_creates_a_tool_with_an_uploaded_image(): void
+    {
+        Storage::fake('public');
+
+        $category = Category::create(['name' => 'Testing Category']);
+        $tag = Tag::create(['name' => 'testing-tag']);
+
+        $response = $this->actingAs($this->user)->post('/api/tools', [
+            'name' => 'Test Tool',
+            'website_url' => 'https://example.com',
+            'description' => 'A tool for testing.',
+            'category_ids' => [$category->id],
+            'role_ids' => [$this->user->role_id],
+            'tag_ids' => [$tag->id],
+            'image' => UploadedFile::fake()->image('logo.png', 200, 200),
+        ]);
+
+        $response->assertCreated();
+        $response->assertJsonPath('data.name', 'Test Tool');
+        $this->assertNotNull($response->json('data.image_url'));
+
+        $tool = Tool::firstWhere('name', 'Test Tool');
+        $this->assertNotNull($tool->image_path);
+        Storage::disk('public')->assertExists($tool->image_path);
+    }
+
+    public function test_updating_a_tool_with_a_new_image_deletes_the_old_one(): void
+    {
+        Storage::fake('public');
+
+        $tool = Tool::create([
+            'name' => 'Original',
+            'website_url' => 'https://example.com',
+            'description' => 'Original description.',
+            'image_path' => UploadedFile::fake()->image('old.png')->store('tools', 'public'),
+            'created_by' => $this->user->id,
+        ]);
+
+        $oldPath = $tool->image_path;
+
+        $response = $this->actingAs($this->user)->post("/api/tools/{$tool->id}", [
+            '_method' => 'PUT',
+            'name' => 'Updated',
+            'website_url' => 'https://example.com',
+            'description' => 'Updated description.',
+            'image' => UploadedFile::fake()->image('new.png'),
+        ]);
+
+        $response->assertOk();
+        Storage::disk('public')->assertMissing($oldPath);
+        Storage::disk('public')->assertExists($tool->fresh()->image_path);
+    }
+
+    public function test_deleting_a_tool_removes_its_image(): void
+    {
+        Storage::fake('public');
+
+        $tool = Tool::create([
+            'name' => 'To Delete',
+            'website_url' => 'https://example.com',
+            'description' => 'Will be deleted.',
+            'image_path' => UploadedFile::fake()->image('delete-me.png')->store('tools', 'public'),
+            'created_by' => $this->user->id,
+        ]);
+
+        $imagePath = $tool->image_path;
+
+        $response = $this->actingAs($this->user)->deleteJson("/api/tools/{$tool->id}");
+
+        $response->assertNoContent();
+        Storage::disk('public')->assertMissing($imagePath);
+    }
+}

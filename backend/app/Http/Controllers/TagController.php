@@ -3,30 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TagRequest;
+use App\Http\Resources\TagResource;
 use App\Models\Tag;
 
 class TagController extends Controller
 {
     public function index()
     {
-        return Tag::all();
+        return TagResource::collection(Tag::all());
     }
 
     public function store(TagRequest $request)
     {
-        return Tag::create($request->validated());
+        return new TagResource(Tag::create($request->validated()));
     }
 
     public function show(Tag $tag)
     {
-        return $tag;
+        return new TagResource($tag);
     }
 
     public function update(TagRequest $request, Tag $tag)
     {
         $tag->update($request->validated());
 
-        return $tag;
+        return new TagResource($tag);
     }
 
     public function destroy(Tag $tag)

@@ -1,3 +1,14 @@
+import type {
+  AuthUser,
+  Category,
+  HealthResponse,
+  Role,
+  Tag,
+  Tool,
+  ToolFilters,
+  ToolInput,
+} from "@/types";
+
 const UNSAFE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 export class ApiError extends Error {
@@ -49,24 +60,13 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
   return res.json() as Promise<T>;
 }
 
-export interface HealthResponse {
-  status: string;
+// Laravel's JsonResource wraps single/collection responses in { data: ... }.
+async function unwrap<T>(promise: Promise<{ data: T }>): Promise<T> {
+  return (await promise).data;
 }
 
 export function getHealth() {
   return apiFetch<HealthResponse>("/api/health");
-}
-
-export interface Role {
-  id: number;
-  name: string;
-}
-
-export interface AuthUser {
-  id: number;
-  name: string;
-  email: string;
-  role: Role;
 }
 
 export function getCsrfCookie() {
@@ -88,4 +88,80 @@ export function logout() {
 
 export function getCurrentUser() {
   return apiFetch<AuthUser>("/api/user");
+}
+
+export function listRoles() {
+  return unwrap(apiFetch<{ data: Role[] }>("/api/roles"));
+}
+
+export function listCategories() {
+  return unwrap(apiFetch<{ data: Category[] }>("/api/categories"));
+}
+
+export function listTags() {
+  return unwrap(apiFetch<{ data: Tag[] }>("/api/tags"));
+}
+
+function buildToolsQuery(filters: ToolFilters = {}): string {
+  const params = new URLSearchParams();
+
+  if (filters.category_id) params.set("category_id", String(filters.category_id));
+  if (filters.role_id) params.set("role_id", String(filters.role_id));
+  if (filters.name) params.set("name", filters.name);
+  filters.tag_ids?.forEach((id) => params.append("tag_ids[]", String(id)));
+
+  const qs = params.toString();
+  return qs ? `?${qs}` : "";
+}
+
+export function listTools(filters?: ToolFilters) {
+  return unwrap(apiFetch<{ data: Tool[] }>(`/api/tools${buildToolsQuery(filters)}`));
+}
+
+export function getTool(id: number) {
+  return unwrap(apiFetch<{ data: Tool }>(`/api/tools/${id}`));
+}
+
+function toolFormData(input: ToolInput): FormData {
+  const formData = new FormData();
+
+  formData.append("name", input.name);
+  formData.append("website_url", input.website_url);
+  if (input.documentation_url) formData.append("documentation_url", input.documentation_url);
+  formData.append("description", input.description);
+  if (input.how_to_use) formData.append("how_to_use", input.how_to_use);
+  if (input.examples) formData.append("examples", input.examples);
+  input.category_ids.forEach((id) => formData.append("category_ids[]", String(id)));
+  input.role_ids.forEach((id) => formData.append("role_ids[]", String(id)));
+  input.tag_ids.forEach((id) => formData.append("tag_ids[]", String(id)));
+  if (input.image) formData.append("image", input.image);
+
+  return formData;
+}
+
+export function createTool(input: ToolInput) {
+  return unwrap(
+    apiFetch<{ data: Tool }>("/api/tools", {
+      method: "POST",
+      body: toolFormData(input),
+    }),
+  );
+}
+
+export function updateTool(id: number, input: ToolInput) {
+  // PHP doesn't populate $_FILES on a native PUT, so multipart updates that
+  // include a file must POST with a spoofed method instead.
+  const formData = toolFormData(input);
+  formData.append("_method", "PUT");
+
+  return unwrap(
+    apiFetch<{ data: Tool }>(`/api/tools/${id}`, {
+      method: "POST",
+      body: formData,
+    }),
+  );
+}
+
+export function deleteTool(id: number) {
+  return apiFetch<void>(`/api/tools/${id}`, { method: "DELETE" });
 }

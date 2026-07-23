@@ -20,7 +20,7 @@ class ToolRequest extends FormRequest
             'description' => ['required', 'string'],
             'how_to_use' => ['nullable', 'string'],
             'examples' => ['nullable', 'string'],
-            'image_path' => ['nullable', 'string', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
 
             'category_ids' => ['nullable', 'array'],
             'category_ids.*' => ['integer', 'exists:categories,id'],
