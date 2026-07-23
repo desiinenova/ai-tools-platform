@@ -14,7 +14,7 @@ export interface NavItem {
 
 export const navItems: NavItem[] = [
   { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { title: "AI Tools", href: "/dashboard/tools", icon: Wrench, isEnabled: false },
+  { title: "AI Tools", href: "/dashboard/tools", icon: Wrench },
   { title: "Add Tool", href: "/dashboard/tools/new", icon: PlusCircle, isEnabled: false },
   { title: "Profile", href: "/dashboard/profile", icon: UserIcon, isEnabled: false },
 ];
