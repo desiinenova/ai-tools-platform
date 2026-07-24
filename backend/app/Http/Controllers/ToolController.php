@@ -32,13 +32,17 @@ class ToolController extends Controller
             $query->where('status', $request->query('status'));
         }
 
+        if ($request->filled('created_by')) {
+            $query->where('created_by', $request->query('created_by'));
+        }
+
         // Each tag ID gets its own whereHas, so the tool must match ALL of
         // them (AND), not just any one.
         foreach ((array) $request->query('tag_ids', []) as $tagId) {
             $query->whereHas('tags', fn ($q) => $q->where('tags.id', $tagId));
         }
 
-        return ToolResource::collection($query->get());
+        return ToolResource::collection($query->latest()->get());
     }
 
     public function store(ToolRequest $request, ToolWorkflowService $workflow)

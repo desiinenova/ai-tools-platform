@@ -59,4 +59,31 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertNoContent();
     }
+
+    public function test_successful_login_updates_last_login_at(): void
+    {
+        $user = User::factory()->create(['role_id' => $this->roleId]);
+        $this->assertNull($user->last_login_at);
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertNotNull($user->fresh()->last_login_at);
+    }
+
+    public function test_authenticated_user_endpoint_returns_profile_fields(): void
+    {
+        $user = User::factory()->create(['role_id' => $this->roleId]);
+
+        $response = $this->actingAs($user)->getJson('/api/user');
+
+        $response->assertOk();
+        $response->assertJsonPath('data.id', $user->id);
+        $response->assertJsonPath('data.role.id', $this->roleId);
+        $response->assertJsonStructure([
+            'data' => ['id', 'name', 'email', 'role' => ['id', 'name'], 'last_login_at', 'created_at'],
+        ]);
+    }
 }

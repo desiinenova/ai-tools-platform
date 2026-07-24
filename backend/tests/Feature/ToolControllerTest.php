@@ -37,6 +37,33 @@ class ToolControllerTest extends TestCase
         $response->assertJsonFragment(['name' => 'backend']);
     }
 
+    public function test_index_can_be_filtered_by_created_by(): void
+    {
+        $otherUser = User::factory()->create(['role_id' => $this->user->role_id]);
+
+        $ownTool = Tool::create([
+            'name' => 'Mine',
+            'website_url' => 'https://example.com',
+            'description' => 'Created by the acting user.',
+            'created_by' => $this->user->id,
+            'status' => 'approved',
+        ]);
+
+        Tool::create([
+            'name' => 'Someone else\'s',
+            'website_url' => 'https://example.com',
+            'description' => 'Created by another user.',
+            'created_by' => $otherUser->id,
+            'status' => 'approved',
+        ]);
+
+        $response = $this->actingAs($this->user)->getJson("/api/tools?created_by={$this->user->id}");
+
+        $response->assertOk();
+        $response->assertJsonCount(1, 'data');
+        $response->assertJsonPath('data.0.id', $ownTool->id);
+    }
+
     public function test_it_creates_a_tool_with_a_markdown_documentation_body(): void
     {
         $response = $this->actingAs($this->user)->postJson('/api/tools', [

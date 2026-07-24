@@ -89,7 +89,7 @@ export function logout() {
 }
 
 export function getCurrentUser() {
-  return apiFetch<AuthUser>("/api/user");
+  return unwrap(apiFetch<{ data: AuthUser }>("/api/user"));
 }
 
 export function listRoles() {
@@ -143,6 +143,7 @@ function buildToolsQuery(filters: ToolFilters = {}): string {
   if (filters.role_id) params.set("role_id", String(filters.role_id));
   if (filters.name) params.set("name", filters.name);
   if (filters.status) params.set("status", filters.status);
+  if (filters.created_by) params.set("created_by", String(filters.created_by));
   filters.tag_ids?.forEach((id) => params.append("tag_ids[]", String(id)));
 
   const qs = params.toString();

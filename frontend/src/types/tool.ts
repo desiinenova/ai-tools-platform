@@ -47,4 +47,5 @@ export interface ToolFilters {
   name?: string;
   tag_ids?: number[];
   status?: ToolStatus;
+  created_by?: number;
 }
