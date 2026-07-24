@@ -16,6 +16,7 @@ class UserResource extends JsonResource
             'role' => new RoleResource($this->whenLoaded('role')),
             'last_login_at' => $this->last_login_at,
             'created_at' => $this->created_at,
+            'two_factor_enabled' => $this->two_factor_confirmed_at !== null,
         ];
     }
 }
