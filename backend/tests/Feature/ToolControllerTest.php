@@ -121,7 +121,7 @@ class ToolControllerTest extends TestCase
             'name' => 'Tiny Image Tool',
             'website_url' => 'https://example.com',
             'description' => 'Tests a genuinely small real image upload.',
-            'image' => new \Illuminate\Http\UploadedFile($path, 'tiny.png', 'image/png', null, true),
+            'image' => new UploadedFile($path, 'tiny.png', 'image/png', null, true),
         ]);
 
         $response->assertCreated();
