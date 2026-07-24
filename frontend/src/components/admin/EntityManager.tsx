@@ -10,6 +10,7 @@ import type { ValidationErrorBody } from "@/types";
 export interface NamedEntity {
   id: number;
   name: string;
+  tools_count: number;
 }
 
 export interface EntityManagerProps<T extends NamedEntity> {
@@ -163,8 +164,8 @@ export function EntityManager<T extends NamedEntity>({
       <Modal
         open={!!deleteTarget}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
-        title={`Delete ${entityLabel}`}
-        description={deleteTarget ? `Delete "${deleteTarget.name}"? This can't be undone.` : undefined}
+        title={`Delete ${entityLabel} "${deleteTarget?.name ?? ""}"?`}
+        description={deleteTarget ? deleteDescription(entityLabel, deleteTarget) : undefined}
       >
         <div className="flex justify-end gap-3">
           <Button variant="secondary" size="sm" onClick={() => setDeleteTarget(null)}>
@@ -181,4 +182,18 @@ export function EntityManager<T extends NamedEntity>({
 
 function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function deleteDescription(entityLabel: string, item: NamedEntity): string {
+  if (item.tools_count === 0) {
+    return "This can't be undone.";
+  }
+
+  const toolWord = item.tools_count === 1 ? "AI Tool" : "AI Tools";
+
+  return (
+    `This ${entityLabel} is currently assigned to ${item.tools_count} ${toolWord}. ` +
+    `Deleting it will automatically remove it from all associated tools — the tools themselves won't be affected. ` +
+    `This can't be undone.`
+  );
 }
