@@ -41,9 +41,6 @@ export function parseToolFilters(searchParams: URLSearchParams): ToolFilters {
   const tagIds = parseTagIds(searchParams.get("tag_ids"));
   if (tagIds !== undefined) filters.tag_ids = tagIds;
 
-  const createdBy = parsePositiveInt(searchParams.get("created_by"));
-  if (createdBy !== undefined) filters.created_by = createdBy;
-
   return filters;
 }
 
@@ -57,7 +54,6 @@ export function serializeToolFilters(filters: ToolFilters): URLSearchParams {
   if (filters.tag_ids && filters.tag_ids.length > 0) {
     params.set("tag_ids", filters.tag_ids.join(","));
   }
-  if (filters.created_by) params.set("created_by", String(filters.created_by));
 
   return params;
 }
