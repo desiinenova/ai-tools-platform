@@ -32,4 +32,13 @@ class ToolRequest extends FormRequest
             'tag_ids.*' => ['integer', 'exists:tags,id'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'image.image' => 'The file must be a valid image (JPG, JPEG, PNG, or WEBP).',
+            'image.mimes' => 'The image must be a JPG, JPEG, PNG, or WEBP file.',
+            'image.max' => 'The selected image exceeds the maximum allowed size (4 MB).',
+        ];
+    }
 }

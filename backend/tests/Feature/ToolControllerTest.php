@@ -63,6 +63,37 @@ class ToolControllerTest extends TestCase
         Storage::disk('public')->assertExists($tool->image_path);
     }
 
+    public function test_it_creates_a_tool_with_a_genuinely_small_real_image(): void
+    {
+        // UploadedFile::fake()->image() always generates a proper GD image at
+        // real dimensions. This uses an actual minimal (68-byte) real PNG
+        // instead, to guard against any regression specific to very small
+        // files rather than the synthetic ones the other tests use.
+        Storage::fake('public');
+
+        $bytes = base64_decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
+        );
+        $path = tempnam(sys_get_temp_dir(), 'test').'.png';
+        file_put_contents($path, $bytes);
+
+        $response = $this->actingAs($this->user)->post('/api/tools', [
+            'name' => 'Tiny Image Tool',
+            'website_url' => 'https://example.com',
+            'description' => 'Tests a genuinely small real image upload.',
+            'image' => new \Illuminate\Http\UploadedFile($path, 'tiny.png', 'image/png', null, true),
+        ]);
+
+        $response->assertCreated();
+        $this->assertNotNull($response->json('data.image_url'));
+
+        $tool = Tool::firstWhere('name', 'Tiny Image Tool');
+        $this->assertNotNull($tool->image_path);
+        Storage::disk('public')->assertExists($tool->image_path);
+
+        unlink($path);
+    }
+
     public function test_updating_a_tool_with_a_new_image_deletes_the_old_one(): void
     {
         Storage::fake('public');

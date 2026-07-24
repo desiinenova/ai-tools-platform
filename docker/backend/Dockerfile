@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip \
     && rm -rf /var/lib/apt/lists/*
 
+COPY docker/backend/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html

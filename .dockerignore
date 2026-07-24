@@ -4,6 +4,7 @@
 backend/vendor
 backend/.env
 backend/node_modules
+backend/public/storage
 
 frontend/node_modules
 frontend/.next

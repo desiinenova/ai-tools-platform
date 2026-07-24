@@ -1,7 +1,9 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useMemo } from "react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Plus } from "lucide-react";
 import { useTools } from "@/lib/hooks/useTools";
 import { parseToolFilters, serializeToolFilters } from "@/lib/toolFilters";
 import { Spinner } from "@/components/ui/Spinner";
@@ -40,11 +42,20 @@ function ToolsPageContent() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">AI Tools</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {isLoading ? "Loading…" : `${tools?.length ?? 0} tool${tools?.length === 1 ? "" : "s"}`}
-        </p>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">AI Tools</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {isLoading ? "Loading…" : `${tools?.length ?? 0} tool${tools?.length === 1 ? "" : "s"}`}
+          </p>
+        </div>
+        <Link
+          href="/dashboard/tools/new"
+          className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+        >
+          <Plus className="h-4 w-4" aria-hidden />
+          Add Tool
+        </Link>
       </div>
 
       <ToolFilters filters={filters} onFilterChange={applyFilters} />

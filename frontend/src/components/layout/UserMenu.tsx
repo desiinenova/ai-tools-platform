@@ -6,12 +6,17 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { logout } from "@/lib/api";
+import { navItems } from "@/lib/navigation";
 import type { AuthUser } from "@/types";
 import { useToast } from "@/components/ui/Toast";
 
 export interface UserMenuProps {
   user: AuthUser;
 }
+
+// Sourced from navItems rather than hardcoded, so this link can't drift out
+// of sync with the Sidebar (same isEnabled gating a page not being built yet).
+const profileNavItem = navItems.find((item) => item.title === "Profile");
 
 function initials(name: string): string {
   return name
@@ -55,15 +60,17 @@ export function UserMenu({ user }: UserMenuProps) {
           sideOffset={8}
           className="z-50 w-48 rounded-md border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-800 dark:bg-gray-900"
         >
-          <DropdownMenu.Item asChild>
-            <Link
-              href="/dashboard/profile"
-              className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm text-gray-700 outline-none data-[highlighted]:bg-gray-100 dark:text-gray-300 dark:data-[highlighted]:bg-gray-800"
-            >
-              <UserIcon className="h-4 w-4" />
-              Profile
-            </Link>
-          </DropdownMenu.Item>
+          {profileNavItem?.isEnabled !== false && (
+            <DropdownMenu.Item asChild>
+              <Link
+                href={profileNavItem?.href ?? "/dashboard/profile"}
+                className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm text-gray-700 outline-none data-[highlighted]:bg-gray-100 dark:text-gray-300 dark:data-[highlighted]:bg-gray-800"
+              >
+                <UserIcon className="h-4 w-4" />
+                Profile
+              </Link>
+            </DropdownMenu.Item>
+          )}
           <DropdownMenu.Separator className="my-1 h-px bg-gray-200 dark:bg-gray-800" />
           <DropdownMenu.Item
             onSelect={handleLogout}

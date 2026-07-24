@@ -21,3 +21,5 @@ export { ToastProvider, useToast } from "./Toast";
 export type { ToastOptions, ToastVariant } from "./Toast";
 
 export { Spinner } from "./Spinner";
+
+export { ImageUpload } from "./ImageUpload";
