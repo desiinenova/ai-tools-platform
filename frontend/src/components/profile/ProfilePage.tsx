@@ -3,6 +3,7 @@
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { formatDate } from "@/lib/formatDate";
 import { TwoFactorSettings } from "./TwoFactorSettings";
 
 export function ProfilePage() {
@@ -30,6 +31,12 @@ export function ProfilePage() {
           <Badge variant="blue" className="w-fit">
             {user.role.name}
           </Badge>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Account created</p>
+          <p className="font-medium text-gray-900 dark:text-gray-100">
+            {formatDate(user.created_at)}
+          </p>
         </div>
       </Card>
 
