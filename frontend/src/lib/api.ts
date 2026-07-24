@@ -9,6 +9,8 @@ import type {
   Tool,
   ToolFilters,
   ToolInput,
+  TwoFactorEnrollment,
+  TwoFactorRecoveryCodes,
 } from "@/types";
 
 const UNSAFE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
@@ -75,12 +77,28 @@ export function getCsrfCookie() {
   return apiFetch<void>("/sanctum/csrf-cookie");
 }
 
-export async function login(email: string, password: string) {
+export interface LoginResult {
+  /** True when credentials were valid but a 2FA code is still required to complete login. */
+  twoFactorRequired: boolean;
+}
+
+export async function login(email: string, password: string): Promise<LoginResult> {
   await getCsrfCookie();
-  await apiFetch<void>("/api/login", {
+
+  const response = await apiFetch<{ two_factor?: boolean } | undefined>("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
+  });
+
+  return { twoFactorRequired: response?.two_factor === true };
+}
+
+export function submitTwoFactorChallenge(code: string) {
+  return apiFetch<void>("/api/two-factor-challenge", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code }),
   });
 }
 
@@ -207,4 +225,28 @@ export function approveTool(id: number) {
 
 export function rejectTool(id: number) {
   return unwrap(apiFetch<{ data: Tool }>(`/api/tools/${id}/reject`, { method: "PATCH" }));
+}
+
+export function enableTwoFactor() {
+  return apiFetch<TwoFactorEnrollment>("/api/two-factor-authentication", { method: "POST" });
+}
+
+export function confirmTwoFactor(code: string) {
+  return apiFetch<TwoFactorRecoveryCodes>(
+    "/api/two-factor-authentication/confirm",
+    { method: "POST", ...jsonBody({ code }) },
+  );
+}
+
+export function disableTwoFactor(password: string) {
+  return apiFetch<void>("/api/two-factor-authentication", {
+    method: "DELETE",
+    ...jsonBody({ password }),
+  });
+}
+
+export function regenerateRecoveryCodes() {
+  return apiFetch<TwoFactorRecoveryCodes>("/api/two-factor-authentication/recovery-codes", {
+    method: "POST",
+  });
 }

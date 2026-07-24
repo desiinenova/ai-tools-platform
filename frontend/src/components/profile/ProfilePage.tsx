@@ -3,6 +3,7 @@
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { TwoFactorSettings } from "./TwoFactorSettings";
 
 export function ProfilePage() {
   const { data: user } = useCurrentUser();
@@ -31,6 +32,8 @@ export function ProfilePage() {
           </Badge>
         </div>
       </Card>
+
+      <TwoFactorSettings />
     </div>
   );
 }

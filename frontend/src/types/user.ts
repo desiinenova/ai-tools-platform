@@ -7,4 +7,5 @@ export interface AuthUser {
   role: Role;
   last_login_at: string | null;
   created_at: string;
+  two_factor_enabled: boolean;
 }
