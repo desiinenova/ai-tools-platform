@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ExternalLink, FileText, Pencil, Trash2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -14,6 +15,7 @@ import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { useDeleteTool, useTool } from "@/lib/hooks/useTools";
 import { canDeleteTool, canEditTool } from "@/lib/permissions";
 import { TOOL_STATUS_BADGE_VARIANTS, TOOL_STATUS_LABELS } from "@/lib/toolStatus";
+import { cn } from "@/lib/cn";
 
 export interface ToolDetailsPageProps {
   toolId: number;
@@ -142,17 +144,28 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
           )}
         </div>
 
-        {tool.how_to_use && (
+        {tool.documentation_body && (
           <div className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">Usage instructions</h2>
-            <p className="whitespace-pre-line text-gray-900 dark:text-gray-100">{tool.how_to_use}</p>
-          </div>
-        )}
-
-        {tool.examples && (
-          <div className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">Examples</h2>
-            <p className="whitespace-pre-line text-gray-900 dark:text-gray-100">{tool.examples}</p>
+            <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">Documentation</h2>
+            <div
+              className={cn(
+                "text-gray-900 dark:text-gray-100",
+                "[&_h1]:mt-4 [&_h1]:text-lg [&_h1]:font-semibold [&_h1]:first:mt-0",
+                "[&_h2]:mt-4 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:first:mt-0",
+                "[&_h3]:mt-3 [&_h3]:text-sm [&_h3]:font-semibold",
+                "[&_p]:mb-3 [&_p]:last:mb-0",
+                "[&_ul]:mb-3 [&_ul]:list-disc [&_ul]:pl-5",
+                "[&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5",
+                "[&_li]:mb-1",
+                "[&_a]:text-blue-600 [&_a]:underline dark:[&_a]:text-blue-400",
+                "[&_blockquote]:mb-3 [&_blockquote]:border-l-2 [&_blockquote]:border-gray-300 [&_blockquote]:pl-3 [&_blockquote]:text-gray-600 dark:[&_blockquote]:border-gray-700 dark:[&_blockquote]:text-gray-400",
+                "[&_code]:rounded [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm dark:[&_code]:bg-gray-800",
+                "[&_pre]:mb-3 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:bg-gray-100 [&_pre]:p-3 [&_pre]:text-sm dark:[&_pre]:bg-gray-800",
+                "[&_pre_code]:bg-transparent [&_pre_code]:p-0",
+              )}
+            >
+              <ReactMarkdown>{tool.documentation_body}</ReactMarkdown>
+            </div>
           </div>
         )}
 

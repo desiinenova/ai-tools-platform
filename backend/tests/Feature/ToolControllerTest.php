@@ -37,6 +37,19 @@ class ToolControllerTest extends TestCase
         $response->assertJsonFragment(['name' => 'backend']);
     }
 
+    public function test_it_creates_a_tool_with_a_markdown_documentation_body(): void
+    {
+        $response = $this->actingAs($this->user)->postJson('/api/tools', [
+            'name' => 'Documented Tool',
+            'website_url' => 'https://example.com',
+            'description' => 'A tool with markdown documentation.',
+            'documentation_body' => "# Setup\n\n1. Install it\n2. Run it",
+        ]);
+
+        $response->assertCreated();
+        $response->assertJsonPath('data.documentation_body', "# Setup\n\n1. Install it\n2. Run it");
+    }
+
     public function test_it_creates_a_tool_with_an_uploaded_image(): void
     {
         Storage::fake('public');

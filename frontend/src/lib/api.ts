@@ -163,9 +163,8 @@ function toolFormData(input: ToolInput): FormData {
   formData.append("name", input.name);
   formData.append("website_url", input.website_url);
   if (input.documentation_url) formData.append("documentation_url", input.documentation_url);
+  if (input.documentation_body) formData.append("documentation_body", input.documentation_body);
   formData.append("description", input.description);
-  if (input.how_to_use) formData.append("how_to_use", input.how_to_use);
-  if (input.examples) formData.append("examples", input.examples);
   input.category_ids.forEach((id) => formData.append("category_ids[]", String(id)));
   input.role_ids.forEach((id) => formData.append("role_ids[]", String(id)));
   input.tag_ids.forEach((id) => formData.append("tag_ids[]", String(id)));

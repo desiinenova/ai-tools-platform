@@ -10,9 +10,8 @@ export interface Tool {
   name: string;
   website_url: string;
   documentation_url: string | null;
+  documentation_body: string | null;
   description: string;
-  how_to_use: string | null;
-  examples: string | null;
   image_url: string | null;
   status: ToolStatus;
   created_by: number | null;
@@ -34,9 +33,8 @@ export interface ToolInput {
   name: string;
   website_url: string;
   documentation_url?: string;
+  documentation_body?: string;
   description: string;
-  how_to_use?: string;
-  examples?: string;
   category_ids: number[];
   role_ids: number[];
   tag_ids: number[];

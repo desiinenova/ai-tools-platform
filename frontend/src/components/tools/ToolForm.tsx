@@ -32,26 +32,24 @@ const MAX_IMAGE_SIZE_BYTES = 4096 * 1024;
 interface FormState {
   name: string;
   website_url: string;
-  documentation_url: string;
   description: string;
-  how_to_use: string;
-  examples: string;
   category_ids: number[];
   role_ids: number[];
   tag_ids: number[];
+  documentation_body: string;
+  documentation_url: string;
   image: File | null;
 }
 
 const EMPTY_FORM: FormState = {
   name: "",
   website_url: "",
-  documentation_url: "",
   description: "",
-  how_to_use: "",
-  examples: "",
   category_ids: [],
   role_ids: [],
   tag_ids: [],
+  documentation_body: "",
+  documentation_url: "",
   image: null,
 };
 
@@ -59,13 +57,12 @@ function toFormState(tool: Tool): FormState {
   return {
     name: tool.name,
     website_url: tool.website_url,
-    documentation_url: tool.documentation_url ?? "",
     description: tool.description,
-    how_to_use: tool.how_to_use ?? "",
-    examples: tool.examples ?? "",
     category_ids: tool.categories.map((c) => c.id),
     role_ids: tool.roles.map((r) => r.id),
     tag_ids: tool.tags.map((t) => t.id),
+    documentation_body: tool.documentation_body ?? "",
+    documentation_url: tool.documentation_url ?? "",
     image: null,
   };
 }
@@ -74,13 +71,12 @@ function toToolInput(form: FormState): ToolInput {
   return {
     name: form.name,
     website_url: form.website_url,
-    documentation_url: form.documentation_url || undefined,
     description: form.description,
-    how_to_use: form.how_to_use || undefined,
-    examples: form.examples || undefined,
     category_ids: form.category_ids,
     role_ids: form.role_ids,
     tag_ids: form.tag_ids,
+    documentation_body: form.documentation_body || undefined,
+    documentation_url: form.documentation_url || undefined,
     image: form.image ?? undefined,
   };
 }
@@ -220,37 +216,13 @@ export function ToolForm({ mode, toolId }: ToolFormProps) {
             error={fieldErrors.website_url?.[0]}
           />
 
-          <Input
-            label="Documentation URL"
-            type="url"
-            placeholder="https:// (optional)"
-            value={form.documentation_url}
-            onChange={(e) => setForm((prev) => ({ ...prev, documentation_url: e.target.value }))}
-            error={fieldErrors.documentation_url?.[0]}
-          />
-
           <Textarea
             label="Description"
+            hint="A short overview of what this tool is — details, usage, and examples belong in Documentation below."
             required
             value={form.description}
             onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
             error={fieldErrors.description?.[0]}
-          />
-
-          <Textarea
-            label="Usage instructions"
-            hint="Optional — how should teammates get started with this tool?"
-            value={form.how_to_use}
-            onChange={(e) => setForm((prev) => ({ ...prev, how_to_use: e.target.value }))}
-            error={fieldErrors.how_to_use?.[0]}
-          />
-
-          <Textarea
-            label="Examples"
-            hint="Optional — real-world examples or links"
-            value={form.examples}
-            onChange={(e) => setForm((prev) => ({ ...prev, examples: e.target.value }))}
-            error={fieldErrors.examples?.[0]}
           />
 
           <MultiSelect
@@ -278,6 +250,24 @@ export function ToolForm({ mode, toolId }: ToolFormProps) {
             selected={form.tag_ids.map(String)}
             onChange={(values) => setForm((prev) => ({ ...prev, tag_ids: values.map(Number) }))}
             error={fieldErrors.tag_ids?.[0]}
+          />
+
+          <Textarea
+            label="Documentation"
+            hint="Optional — supports Markdown. This is the place for usage instructions, examples, code snippets, tips, and notes."
+            rows={10}
+            value={form.documentation_body}
+            onChange={(e) => setForm((prev) => ({ ...prev, documentation_body: e.target.value }))}
+            error={fieldErrors.documentation_body?.[0]}
+          />
+
+          <Input
+            label="Official Documentation URL"
+            type="url"
+            placeholder="https:// (optional)"
+            value={form.documentation_url}
+            onChange={(e) => setForm((prev) => ({ ...prev, documentation_url: e.target.value }))}
+            error={fieldErrors.documentation_url?.[0]}
           />
 
           <ImageUpload

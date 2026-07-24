@@ -19,9 +19,8 @@ class ToolRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'website_url' => ['required', 'url', 'max:255'],
             'documentation_url' => ['nullable', 'url', 'max:255'],
+            'documentation_body' => ['nullable', 'string'],
             'description' => ['required', 'string'],
-            'how_to_use' => ['nullable', 'string'],
-            'examples' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
 
             'category_ids' => ['nullable', 'array'],
