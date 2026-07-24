@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/Toast";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { useDeleteTool } from "@/lib/hooks/useTools";
 import { canDeleteTool, canEditTool } from "@/lib/permissions";
+import { TOOL_STATUS_BADGE_VARIANTS, TOOL_STATUS_LABELS } from "@/lib/toolStatus";
 import type { Tool } from "@/types";
 
 export interface ToolCardProps {
@@ -69,7 +70,12 @@ export function ToolCard({ tool }: ToolCardProps) {
       )}
 
       <div className="flex flex-col gap-1">
-        <h3 className="font-semibold text-gray-900 dark:text-gray-100">{tool.name}</h3>
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100">{tool.name}</h3>
+          <Badge variant={TOOL_STATUS_BADGE_VARIANTS[tool.status]} className="shrink-0">
+            {TOOL_STATUS_LABELS[tool.status]}
+          </Badge>
+        </div>
         <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">{tool.description}</p>
       </div>
 

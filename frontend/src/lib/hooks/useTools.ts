@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createTool, deleteTool, getTool, listTools, updateTool } from "@/lib/api";
+import { approveTool, createTool, deleteTool, getTool, listTools, rejectTool, updateTool } from "@/lib/api";
 import type { ToolFilters, ToolInput } from "@/types";
 
 export const toolKeys = {
@@ -59,5 +59,31 @@ export function useDeleteTool() {
       queryClient.removeQueries({ queryKey: toolKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: toolKeys.lists() });
     },
+  });
+}
+
+/** Owner-only queue: tools awaiting moderation. */
+export function usePendingTools() {
+  return useQuery({
+    queryKey: toolKeys.list({ status: "pending" }),
+    queryFn: () => listTools({ status: "pending" }),
+  });
+}
+
+export function useApproveTool() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: approveTool,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: toolKeys.all }),
+  });
+}
+
+export function useRejectTool() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: rejectTool,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: toolKeys.all }),
   });
 }

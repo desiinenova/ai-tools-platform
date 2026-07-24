@@ -1,9 +1,11 @@
 import type {
   AuthUser,
   Category,
+  CategoryInput,
   HealthResponse,
   Role,
   Tag,
+  TagInput,
   Tool,
   ToolFilters,
   ToolInput,
@@ -98,8 +100,40 @@ export function listCategories() {
   return unwrap(apiFetch<{ data: Category[] }>("/api/categories"));
 }
 
+function jsonBody(input: unknown): RequestInit {
+  return { headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) };
+}
+
+export function createCategory(input: CategoryInput) {
+  return unwrap(
+    apiFetch<{ data: Category }>("/api/categories", { method: "POST", ...jsonBody(input) }),
+  );
+}
+
+export function updateCategory(id: number, input: CategoryInput) {
+  return unwrap(
+    apiFetch<{ data: Category }>(`/api/categories/${id}`, { method: "PUT", ...jsonBody(input) }),
+  );
+}
+
+export function deleteCategory(id: number) {
+  return apiFetch<void>(`/api/categories/${id}`, { method: "DELETE" });
+}
+
 export function listTags() {
   return unwrap(apiFetch<{ data: Tag[] }>("/api/tags"));
+}
+
+export function createTag(input: TagInput) {
+  return unwrap(apiFetch<{ data: Tag }>("/api/tags", { method: "POST", ...jsonBody(input) }));
+}
+
+export function updateTag(id: number, input: TagInput) {
+  return unwrap(apiFetch<{ data: Tag }>(`/api/tags/${id}`, { method: "PUT", ...jsonBody(input) }));
+}
+
+export function deleteTag(id: number) {
+  return apiFetch<void>(`/api/tags/${id}`, { method: "DELETE" });
 }
 
 function buildToolsQuery(filters: ToolFilters = {}): string {
@@ -108,6 +142,7 @@ function buildToolsQuery(filters: ToolFilters = {}): string {
   if (filters.category_id) params.set("category_id", String(filters.category_id));
   if (filters.role_id) params.set("role_id", String(filters.role_id));
   if (filters.name) params.set("name", filters.name);
+  if (filters.status) params.set("status", filters.status);
   filters.tag_ids?.forEach((id) => params.append("tag_ids[]", String(id)));
 
   const qs = params.toString();
@@ -164,4 +199,12 @@ export function updateTool(id: number, input: ToolInput) {
 
 export function deleteTool(id: number) {
   return apiFetch<void>(`/api/tools/${id}`, { method: "DELETE" });
+}
+
+export function approveTool(id: number) {
+  return unwrap(apiFetch<{ data: Tool }>(`/api/tools/${id}/approve`, { method: "PATCH" }));
+}
+
+export function rejectTool(id: number) {
+  return unwrap(apiFetch<{ data: Tool }>(`/api/tools/${id}/reject`, { method: "PATCH" }));
 }

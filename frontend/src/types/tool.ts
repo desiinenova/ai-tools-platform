@@ -48,4 +48,5 @@ export interface ToolFilters {
   role_id?: number;
   name?: string;
   tag_ids?: number[];
+  status?: ToolStatus;
 }

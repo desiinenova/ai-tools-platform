@@ -1,6 +1,7 @@
-import { LayoutDashboard, PlusCircle, User as UserIcon, Wrench } from "lucide-react";
+import { LayoutDashboard, PlusCircle, ShieldCheck, User as UserIcon, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { AuthUser } from "@/types";
+import { isOwner } from "@/lib/permissions";
 
 export interface NavItem {
   title: string;
@@ -17,4 +18,5 @@ export const navItems: NavItem[] = [
   { title: "AI Tools", href: "/dashboard/tools", icon: Wrench },
   { title: "Add Tool", href: "/dashboard/tools/new", icon: PlusCircle },
   { title: "Profile", href: "/dashboard/profile", icon: UserIcon },
+  { title: "Admin", href: "/dashboard/admin", icon: ShieldCheck, isVisible: isOwner },
 ];

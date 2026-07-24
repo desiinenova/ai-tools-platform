@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/Toast";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { useDeleteTool, useTool } from "@/lib/hooks/useTools";
 import { canDeleteTool, canEditTool } from "@/lib/permissions";
+import { TOOL_STATUS_BADGE_VARIANTS, TOOL_STATUS_LABELS } from "@/lib/toolStatus";
 
 export interface ToolDetailsPageProps {
   toolId: number;
@@ -72,7 +73,12 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
       </Link>
 
       <div className="flex items-start justify-between gap-4">
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{tool.name}</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{tool.name}</h1>
+          <Badge variant={TOOL_STATUS_BADGE_VARIANTS[tool.status]}>
+            {TOOL_STATUS_LABELS[tool.status]}
+          </Badge>
+        </div>
 
         <div className="flex items-center gap-2">
           {canEditTool(currentUser, tool) && (
