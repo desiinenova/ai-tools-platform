@@ -118,3 +118,7 @@ docker/     Dockerfiles and Nginx config
 ```
 
 Within the backend, business logic is deliberately kept out of controllers where it has real shape: `app/Services/ToolWorkflowService.php` owns the approval/status state machine, `app/Services/TwoFactorAuthenticationService.php` owns 2FA enrollment/verification, and `app/Policies/*` own all authorization decisions.
+
+## Working with AI agents on this project
+
+This project was built collaboratively with Claude Code. [`CLAUDE.md`](./CLAUDE.md) has the operating rules; [`docs/AI_AGENTS.md`](./docs/AI_AGENTS.md) explains how that collaboration actually worked in practice, and [`docs/PROMPTS.md`](./docs/PROMPTS.md) has example prompts for continuing development the same way.
