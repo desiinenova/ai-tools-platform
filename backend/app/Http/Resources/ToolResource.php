@@ -19,6 +19,7 @@ class ToolResource extends JsonResource
             'how_to_use' => $this->how_to_use,
             'examples' => $this->examples,
             'image_url' => $this->image_path ? Storage::disk('public')->url($this->image_path) : null,
+            'status' => $this->status->value,
             'created_by' => $this->created_by,
             'creator' => $this->whenLoaded('creator', fn () => [
                 'id' => $this->creator->id,

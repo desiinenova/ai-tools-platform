@@ -2,6 +2,8 @@ import type { Category } from "./category";
 import type { Role } from "./role";
 import type { Tag } from "./tag";
 
+export type ToolStatus = "pending" | "approved" | "rejected";
+
 /** Read model — mirrors ToolResource exactly. */
 export interface Tool {
   id: number;
@@ -12,6 +14,7 @@ export interface Tool {
   how_to_use: string | null;
   examples: string | null;
   image_url: string | null;
+  status: ToolStatus;
   created_by: number | null;
   creator?: { id: number; name: string };
   categories: Category[];

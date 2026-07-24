@@ -21,6 +21,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('tags', TagController::class);
     Route::apiResource('tools', ToolController::class);
+    Route::patch('tools/{tool}/approve', [ToolController::class, 'approve']);
+    Route::patch('tools/{tool}/reject', [ToolController::class, 'reject']);
 });
 
 require __DIR__.'/auth.php';
