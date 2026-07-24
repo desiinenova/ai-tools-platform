@@ -44,6 +44,12 @@ export default function DashboardPage() {
     return null;
   }
 
+  // "Recommended" is meant to surface other people's tools — a user's own
+  // submissions are already covered by the "My AI Tools" section above.
+  const recommendedForRole = (recommendedTools.data ?? []).filter(
+    (tool) => tool.created_by !== user.id,
+  );
+
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -107,13 +113,13 @@ export default function DashboardPage() {
           <div className="flex justify-center py-8">
             <Spinner />
           </div>
-        ) : (recommendedTools.data?.length ?? 0) === 0 ? (
+        ) : recommendedForRole.length === 0 ? (
           <p className="text-sm text-gray-500 dark:text-gray-400">
             No tools recommended for your role yet.
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {recommendedTools.data!.slice(0, RECOMMENDED_LIMIT).map((tool) => (
+            {recommendedForRole.slice(0, RECOMMENDED_LIMIT).map((tool) => (
               <ToolCard key={tool.id} tool={tool} />
             ))}
           </div>
