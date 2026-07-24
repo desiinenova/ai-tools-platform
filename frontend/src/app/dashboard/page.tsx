@@ -65,7 +65,7 @@ export default function DashboardPage() {
         <StatCard
           icon={Clock}
           label="Last login"
-          value={user.last_login_at ? formatDateTime(user.last_login_at) : "—"}
+          value={user.last_login_at ? formatDateTime(user.last_login_at) : "First login"}
         />
       </div>
 
@@ -73,7 +73,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">My AI Tools</h2>
           <Link
-            href="/dashboard/tools"
+            href={`/dashboard/tools?created_by=${user.id}`}
             className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
           >
             View all
@@ -106,7 +106,7 @@ export default function DashboardPage() {
 
       <section className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          Recommended for {user.role.name}
+          Recommended for your role
         </h2>
 
         {recommendedTools.isLoading ? (
