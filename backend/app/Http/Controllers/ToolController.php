@@ -6,8 +6,10 @@ use App\Http\Requests\ToolRequest;
 use App\Http\Resources\ToolResource;
 use App\Models\Tool;
 use App\Services\ToolWorkflowService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class ToolController extends Controller
 {
@@ -53,11 +55,15 @@ class ToolController extends Controller
             $data['image_path'] = $request->file('image')->store('tools', 'public');
         }
 
-        $tool = Tool::create([
-            ...$data,
-            'created_by' => $request->user()->id,
-            'status' => $workflow->determineInitialStatus($request->user()),
-        ]);
+        try {
+            $tool = Tool::create([
+                ...$data,
+                'created_by' => $request->user()->id,
+                'status' => $workflow->determineInitialStatus($request->user()),
+            ]);
+        } catch (QueryException $e) {
+            $this->throwAsDuplicateToolError($e);
+        }
 
         $tool->categories()->sync($request->input('category_ids', []));
         $tool->roles()->sync($request->input('role_ids', []));
@@ -87,7 +93,11 @@ class ToolController extends Controller
 
         $data['status'] = $workflow->resolveStatusAfterUpdate($tool, $request->user());
 
-        $tool->update($data);
+        try {
+            $tool->update($data);
+        } catch (QueryException $e) {
+            $this->throwAsDuplicateToolError($e);
+        }
 
         $tool->categories()->sync($request->input('category_ids', []));
         $tool->roles()->sync($request->input('role_ids', []));
@@ -107,6 +117,27 @@ class ToolController extends Controller
         $tool->delete();
 
         return response()->noContent();
+    }
+
+    /**
+     * ToolRequest's validation already catches duplicate name/website_url in
+     * virtually every case — this only fires on the rare race where two
+     * near-simultaneous requests both pass validation before either write
+     * completes. Converts the database's unique-constraint violation into
+     * the same 422 shape a normal validation failure would produce.
+     */
+    private function throwAsDuplicateToolError(QueryException $e): never
+    {
+        if ($e->getCode() !== '23000') {
+            throw $e;
+        }
+
+        $field = str_contains($e->getMessage(), 'tools_website_url_unique') ? 'website_url' : 'name';
+        $message = $field === 'name'
+            ? 'A tool with this name already exists.'
+            : 'A tool with this website URL already exists.';
+
+        throw ValidationException::withMessages([$field => [$message]]);
     }
 
     public function approve(Tool $tool, ToolWorkflowService $workflow)

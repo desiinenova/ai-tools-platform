@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CaseInsensitiveUnique;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ToolRequest extends FormRequest
@@ -13,11 +14,38 @@ class ToolRequest extends FormRequest
         return $tool ? $this->user()->can('update', $tool) : true;
     }
 
+    /**
+     * Canonicalize name/website_url before validation runs, so the unique
+     * checks below (and the database constraint) compare like with like:
+     * trimmed names, and URLs without a trailing slash. Intentionally does
+     * not touch scheme/host casing or www — trailing-slash normalization is
+     * the only URL normalization this project applies.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name' => is_string($this->name) ? trim($this->name) : $this->name,
+            'website_url' => is_string($this->website_url)
+                ? rtrim(trim($this->website_url), '/')
+                : $this->website_url,
+        ]);
+    }
+
     public function rules(): array
     {
+        $tool = $this->route('tool');
+
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'website_url' => ['required', 'url', 'max:255'],
+            'name' => [
+                'required', 'string', 'max:255',
+                new CaseInsensitiveUnique('tools', 'name', 'A tool with this name already exists.', $tool?->id),
+            ],
+            'website_url' => [
+                'required', 'url', 'max:255',
+                new CaseInsensitiveUnique(
+                    'tools', 'website_url', 'A tool with this website URL already exists.', $tool?->id
+                ),
+            ],
             'documentation_url' => ['nullable', 'url', 'max:255'],
             'documentation_body' => ['nullable', 'string'],
             'description' => ['required', 'string'],

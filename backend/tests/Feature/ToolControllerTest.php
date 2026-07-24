@@ -51,7 +51,7 @@ class ToolControllerTest extends TestCase
 
         Tool::create([
             'name' => 'Someone else\'s',
-            'website_url' => 'https://example.com',
+            'website_url' => 'https://another-example.com',
             'description' => 'Created by another user.',
             'created_by' => $otherUser->id,
             'status' => 'approved',
