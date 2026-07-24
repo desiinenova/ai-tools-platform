@@ -2,10 +2,9 @@ import type { AuthUser, Tool } from "@/types";
 
 /**
  * Authorization rules, kept separate from session/identity (useCurrentUser).
- * These are presentation-only today — the backend does not enforce them yet
- * (Day 4). Each function here is meant to map onto a future Laravel Policy
- * method of the same name, so the rule lives in exactly one place when that
- * mapping happens.
+ * These mirror the corresponding Laravel Policy methods (ToolPolicy::update /
+ * ::delete) so the UI can hide actions the API would reject — the API is
+ * still the enforcement point, this is presentation-only.
  */
 
 export function hasRole(user: AuthUser | null | undefined, roles: string[]): boolean {

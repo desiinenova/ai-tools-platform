@@ -83,6 +83,8 @@ class ToolController extends Controller
 
     public function destroy(Tool $tool)
     {
+        $this->authorize('delete', $tool);
+
         if ($tool->image_path) {
             Storage::disk('public')->delete($tool->image_path);
         }

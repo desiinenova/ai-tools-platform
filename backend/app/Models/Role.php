@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
+    public const OWNER = 'owner';
+
     protected $fillable = [
         'name',
     ];

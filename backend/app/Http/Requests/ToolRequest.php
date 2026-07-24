@@ -8,7 +8,9 @@ class ToolRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $tool = $this->route('tool');
+
+        return $tool ? $this->user()->can('update', $tool) : true;
     }
 
     public function rules(): array

@@ -33,6 +33,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function isOwner(): bool
+    {
+        return $this->role->name === Role::OWNER;
+    }
+
     public function tools(): HasMany
     {
         return $this->hasMany(Tool::class, 'created_by');
