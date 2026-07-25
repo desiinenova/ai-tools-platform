@@ -2,7 +2,6 @@ import type {
   AuthUser,
   Category,
   CategoryInput,
-  HealthResponse,
   Role,
   Tag,
   TagInput,
@@ -67,10 +66,6 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
 // Laravel's JsonResource wraps single/collection responses in { data: ... }.
 async function unwrap<T>(promise: Promise<{ data: T }>): Promise<T> {
   return (await promise).data;
-}
-
-export function getHealth() {
-  return apiFetch<HealthResponse>("/api/health");
 }
 
 export function getCsrfCookie() {

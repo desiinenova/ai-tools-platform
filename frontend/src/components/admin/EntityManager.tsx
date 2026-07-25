@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
-import { Button, Card, Input, Modal } from "@/components/ui";
+import { Button, Card, IconButton, Input, Modal, Spinner } from "@/components/ui";
 import { useToast } from "@/components/ui/Toast";
 import { ApiError } from "@/lib/api";
 import type { ValidationErrorBody } from "@/types";
@@ -16,6 +16,8 @@ export interface NamedEntity {
 export interface EntityManagerProps<T extends NamedEntity> {
   /** Singular, lowercase noun used in headings/messages, e.g. "category". */
   entityLabel: string;
+  /** Plural, lowercase noun used in the empty state, e.g. "categories". */
+  entityLabelPlural: string;
   items: T[] | undefined;
   isLoading: boolean;
   isMutating: boolean;
@@ -31,6 +33,7 @@ export interface EntityManagerProps<T extends NamedEntity> {
  */
 export function EntityManager<T extends NamedEntity>({
   entityLabel,
+  entityLabelPlural,
   items,
   isLoading,
   isMutating,
@@ -104,9 +107,15 @@ export function EntityManager<T extends NamedEntity>({
       </div>
 
       <Card className="flex flex-col gap-0 p-0">
-        {isLoading && <p className="p-4 text-sm text-gray-500 dark:text-gray-400">Loading…</p>}
+        {isLoading && (
+          <div className="flex justify-center py-8">
+            <Spinner />
+          </div>
+        )}
         {!isLoading && (items?.length ?? 0) === 0 && (
-          <p className="p-4 text-sm text-gray-500 dark:text-gray-400">No {entityLabel}s yet.</p>
+          <p className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+            No {entityLabelPlural} yet.
+          </p>
         )}
         {items?.map((item) => (
           <div
@@ -115,22 +124,16 @@ export function EntityManager<T extends NamedEntity>({
           >
             <span className="text-sm text-gray-900 dark:text-gray-100">{item.name}</span>
             <div className="flex items-center gap-1">
-              <button
-                type="button"
-                aria-label={`Edit ${item.name}`}
-                onClick={() => openEdit(item)}
-                className="rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-              >
+              <IconButton aria-label={`Edit ${item.name}`} onClick={() => openEdit(item)}>
                 <Pencil className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
+              </IconButton>
+              <IconButton
+                variant="danger"
                 aria-label={`Delete ${item.name}`}
                 onClick={() => setDeleteTarget(item)}
-                className="rounded p-1.5 text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-950 dark:hover:text-red-400"
               >
                 <Trash2 className="h-4 w-4" />
-              </button>
+              </IconButton>
             </div>
           </div>
         ))}

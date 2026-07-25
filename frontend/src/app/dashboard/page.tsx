@@ -7,6 +7,7 @@ import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { useTools } from "@/lib/hooks/useTools";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { Spinner } from "@/components/ui/Spinner";
 import { ToolCard } from "@/components/tools/ToolCard";
 import { formatDateTime } from "@/lib/formatDate";
@@ -59,9 +60,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Welcome back, {user.name}
-      </h1>
+      <PageHeader title={`Welcome back, ${user.name}`} />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <StatCard

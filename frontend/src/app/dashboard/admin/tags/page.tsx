@@ -12,6 +12,7 @@ export default function AdminTagsPage() {
   return (
     <EntityManager
       entityLabel="tag"
+      entityLabelPlural="tags"
       items={tags}
       isLoading={isLoading}
       isMutating={createTag.isPending || updateTag.isPending}

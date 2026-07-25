@@ -3,6 +3,7 @@
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { formatDate } from "@/lib/formatDate";
 import { TwoFactorSettings } from "./TwoFactorSettings";
 
@@ -15,7 +16,7 @@ export function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Profile</h1>
+      <PageHeader title="Profile" />
 
       <Card className="flex max-w-md flex-col gap-4">
         <div>

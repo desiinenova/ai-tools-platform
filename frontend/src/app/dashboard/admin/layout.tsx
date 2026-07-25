@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { isOwner } from "@/lib/permissions";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { Spinner } from "@/components/ui/Spinner";
 import { cn } from "@/lib/cn";
 
@@ -39,12 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Admin</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Tool moderation and taxonomy management.
-        </p>
-      </div>
+      <PageHeader title="Admin" description="Tool moderation and taxonomy management." />
 
       <div className="flex gap-1 border-b border-gray-200 dark:border-gray-800">
         {tabs.map((tab) => (

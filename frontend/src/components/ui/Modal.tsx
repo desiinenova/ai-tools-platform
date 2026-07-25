@@ -2,6 +2,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { cn } from "@/lib/cn";
 
 export interface ModalProps {
   open: boolean;
@@ -9,14 +10,34 @@ export interface ModalProps {
   title: string;
   description?: string;
   children: React.ReactNode;
+  /**
+   * "center" (default): a centered dialog box, for confirmations/forms.
+   * "drawer": a full-height panel anchored to the left edge, for the mobile
+   * nav — same Dialog behavior underneath, just repositioned.
+   */
+  variant?: "center" | "drawer";
 }
 
-export function Modal({ open, onOpenChange, title, description, children }: ModalProps) {
+const contentClassName: Record<NonNullable<ModalProps["variant"]>, string> = {
+  center:
+    "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900",
+  drawer:
+    "fixed inset-y-0 left-0 z-50 flex h-full w-72 max-w-[80vw] flex-col overflow-y-auto border-r border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900",
+};
+
+export function Modal({
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  variant = "center",
+}: ModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900">
+        <Dialog.Content className={cn(contentClassName[variant])}>
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>
               <Dialog.Title className="text-lg font-semibold text-gray-900 dark:text-gray-100">

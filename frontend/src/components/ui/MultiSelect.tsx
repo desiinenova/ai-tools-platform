@@ -60,7 +60,7 @@ export function MultiSelect({
           className={cn(
             "flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-left text-sm",
             "border-gray-300 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100",
-            "focus:outline-none focus:ring-2 focus:ring-blue-500",
+            "focus:outline-none focus:ring-2 focus:ring-accent",
             selected.length === 0 && "text-gray-400 dark:text-gray-500",
             error && "border-red-500",
           )}
@@ -84,7 +84,7 @@ export function MultiSelect({
                     <Checkbox.Root
                       checked={checked}
                       onCheckedChange={() => toggle(option.value)}
-                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-gray-400 data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600"
+                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-gray-400 data-[state=checked]:border-accent data-[state=checked]:bg-accent"
                     >
                       <Checkbox.Indicator>
                         <Check className="h-3 w-3 text-white" />

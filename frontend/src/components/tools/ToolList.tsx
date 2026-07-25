@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
+import { StateMessage } from "@/components/ui/StateMessage";
 import { ToolCard } from "./ToolCard";
 import { ToolCardSkeleton } from "./ToolCardSkeleton";
 import { ToolsEmptyState } from "./ToolsEmptyState";
@@ -36,12 +37,16 @@ export function ToolList({
 
   if (error) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-red-300 py-16 text-center dark:border-red-900">
-        <p className="text-sm text-red-600 dark:text-red-400">Something went wrong loading tools.</p>
-        <Button variant="secondary" size="sm" onClick={onRetry}>
-          Retry
-        </Button>
-      </div>
+      <StateMessage
+        tone="danger"
+        message="Something went wrong loading tools."
+        className="rounded-lg border border-dashed border-red-300 dark:border-red-900"
+        action={
+          <Button variant="secondary" size="sm" onClick={onRetry}>
+            Retry
+          </Button>
+        }
+      />
     );
   }
 

@@ -17,6 +17,7 @@ export default function AdminCategoriesPage() {
   return (
     <EntityManager
       entityLabel="category"
+      entityLabelPlural="categories"
       items={categories}
       isLoading={isLoading}
       isMutating={createCategory.isPending || updateCategory.isPending}

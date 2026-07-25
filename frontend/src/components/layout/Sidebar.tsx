@@ -56,7 +56,7 @@ export function Sidebar({ user, mobileOpen, onMobileOpenChange }: SidebarProps) 
         <NavLinks user={user} />
       </aside>
 
-      <Modal open={mobileOpen} onOpenChange={onMobileOpenChange} title="Menu">
+      <Modal open={mobileOpen} onOpenChange={onMobileOpenChange} title="Menu" variant="drawer">
         <NavLinks user={user} onNavigate={() => onMobileOpenChange(false)} />
       </Modal>
     </>

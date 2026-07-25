@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Spinner } from "@/components/ui/Spinner";
+import { StateMessage } from "@/components/ui/StateMessage";
 import { useToast } from "@/components/ui/Toast";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { useDeleteTool, useTool } from "@/lib/hooks/useTools";
@@ -52,15 +53,18 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
 
   if (error || !tool) {
     return (
-      <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <p className="text-sm text-red-600 dark:text-red-400">This tool couldn&apos;t be loaded.</p>
-        <Link
-          href="/dashboard/tools"
-          className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
-        >
-          Back to AI Tools
-        </Link>
-      </div>
+      <StateMessage
+        tone="danger"
+        message="This tool couldn't be loaded."
+        action={
+          <Link
+            href="/dashboard/tools"
+            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            Back to AI Tools
+          </Link>
+        }
+      />
     );
   }
 
@@ -74,7 +78,7 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
         Back to AI Tools
       </Link>
 
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{tool.name}</h1>
           <Badge variant={TOOL_STATUS_BADGE_VARIANTS[tool.status]}>

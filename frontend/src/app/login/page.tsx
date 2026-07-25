@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiError, login, submitTwoFactorChallenge } from "@/lib/api";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
 
 type Step = "credentials" | "two-factor";
 
@@ -63,96 +66,72 @@ export default function LoginPage() {
   if (step === "two-factor") {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
-        <h1 className="text-2xl font-semibold">Enter your authentication code</h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          Enter your authentication code
+        </h1>
 
-        <form
-          onSubmit={handleChallengeSubmit}
-          className="flex w-full max-w-sm flex-col gap-4"
-        >
-          <div className="flex flex-col gap-1">
-            <label htmlFor="code" className="text-sm font-medium">
-              Code from your authenticator app, or a recovery code
-            </label>
-            <input
-              id="code"
-              type="text"
+        <Card className="w-full max-w-sm">
+          <form onSubmit={handleChallengeSubmit} className="flex flex-col gap-4">
+            <Input
+              label="Code from your authenticator app, or a recovery code"
               required
               autoFocus
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="rounded border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
             />
-          </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
 
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
-          >
-            {submitting ? "Verifying..." : "Verify"}
-          </button>
+            <Button type="submit" isLoading={submitting}>
+              Verify
+            </Button>
 
-          <button
-            type="button"
-            onClick={() => {
-              setStep("credentials");
-              setCode("");
-              setError(null);
-            }}
-            className="text-sm text-gray-600 hover:underline dark:text-gray-400"
-          >
-            Back to login
-          </button>
-        </form>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                setStep("credentials");
+                setCode("");
+                setError(null);
+              }}
+            >
+              Back to login
+            </Button>
+          </form>
+        </Card>
       </main>
     );
   }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
-      <h1 className="text-2xl font-semibold">Log in</h1>
+      <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Log in</h1>
 
-      <form onSubmit={handleCredentialsSubmit} className="flex w-full max-w-sm flex-col gap-4">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="text-sm font-medium">
-            Email
-          </label>
-          <input
-            id="email"
+      <Card className="w-full max-w-sm">
+        <form onSubmit={handleCredentialsSubmit} className="flex flex-col gap-4">
+          <Input
+            label="Email"
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
           />
-        </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="text-sm font-medium">
-            Password
-          </label>
-          <input
-            id="password"
+          <Input
+            label="Password"
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
           />
-        </div>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
-        >
-          {submitting ? "Logging in..." : "Log in"}
-        </button>
-      </form>
+          <Button type="submit" isLoading={submitting}>
+            Log in
+          </Button>
+        </form>
+      </Card>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-export type { HealthResponse, ValidationErrorBody } from "./api";
+export type { ValidationErrorBody } from "./api";
 export type { Role } from "./role";
 export type { AuthUser } from "./user";
 export type { Category, CategoryInput } from "./category";

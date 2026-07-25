@@ -58,7 +58,7 @@ export function PendingToolCard({ tool }: PendingToolCardProps) {
       <div className="flex shrink-0 gap-2">
         <Button
           size="sm"
-          variant="secondary"
+          variant="success"
           isLoading={approveTool.isPending}
           disabled={rejectTool.isPending}
           onClick={handleApprove}

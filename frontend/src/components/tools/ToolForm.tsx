@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { MultiSelect } from "@/components/ui/MultiSelect";
 import { ImageUpload } from "@/components/ui/ImageUpload";
+import { LinkButton } from "@/components/ui/LinkButton";
 import { Spinner } from "@/components/ui/Spinner";
+import { StateMessage } from "@/components/ui/StateMessage";
 import { useToast } from "@/components/ui/Toast";
 import { useCategories } from "@/lib/hooks/useCategories";
 import { useRoles } from "@/lib/hooks/useRoles";
@@ -164,29 +166,34 @@ export function ToolForm({ mode, toolId }: ToolFormProps) {
 
   if (mode === "edit" && toolQuery.error) {
     return (
-      <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <p className="text-sm text-red-600 dark:text-red-400">This tool couldn&apos;t be loaded.</p>
-        <Link
-          href="/dashboard/tools"
-          className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
-        >
-          Back to AI Tools
-        </Link>
-      </div>
+      <StateMessage
+        tone="danger"
+        message="This tool couldn't be loaded."
+        action={
+          <Link
+            href="/dashboard/tools"
+            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            Back to AI Tools
+          </Link>
+        }
+      />
     );
   }
 
   if (mode === "edit" && toolQuery.data && !canEditTool(currentUser, toolQuery.data)) {
     return (
-      <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <p className="text-gray-600 dark:text-gray-400">You don&apos;t have permission to edit this tool.</p>
-        <Link
-          href="/dashboard/tools"
-          className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
-        >
-          Back to AI Tools
-        </Link>
-      </div>
+      <StateMessage
+        message="You don't have permission to edit this tool."
+        action={
+          <Link
+            href="/dashboard/tools"
+            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            Back to AI Tools
+          </Link>
+        }
+      />
     );
   }
 
@@ -283,12 +290,9 @@ export function ToolForm({ mode, toolId }: ToolFormProps) {
             <Button type="submit" isLoading={isSubmitting}>
               {mode === "create" ? "Create tool" : "Save changes"}
             </Button>
-            <Link
-              href="/dashboard/tools"
-              className="text-sm font-medium text-gray-600 hover:underline dark:text-gray-400"
-            >
+            <LinkButton href="/dashboard/tools" variant="secondary">
               Cancel
-            </Link>
+            </LinkButton>
           </div>
         </form>
       </Card>
