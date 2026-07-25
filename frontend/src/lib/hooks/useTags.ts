@@ -10,6 +10,10 @@ export function useTags() {
   return useQuery({
     queryKey: tagKeys.all,
     queryFn: listTags,
+    // Same reasoning as useCategories: owner-managed, mutations already
+    // invalidate explicitly, so a long staleTime is a safe refetch-reduction
+    // rather than a correctness dependency.
+    staleTime: 5 * 60_000,
   });
 }
 

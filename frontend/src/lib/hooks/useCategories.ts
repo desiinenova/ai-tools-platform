@@ -10,6 +10,11 @@ export function useCategories() {
   return useQuery({
     queryKey: categoryKeys.all,
     queryFn: listCategories,
+    // Owner-managed taxonomy, changed only via the mutations below, which
+    // already invalidate this query explicitly on success — a long
+    // staleTime just avoids needless refetches, it isn't relied on for
+    // correctness.
+    staleTime: 5 * 60_000,
   });
 }
 
