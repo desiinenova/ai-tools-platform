@@ -12,11 +12,11 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-accent text-white hover:bg-accent-hover disabled:bg-blue-300",
+  primary: "bg-accent text-white hover:bg-accent-hover disabled:bg-indigo-300",
   secondary:
     "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800",
-  danger: "bg-danger text-white hover:bg-danger-hover disabled:bg-red-300",
-  success: "bg-success text-white hover:bg-success-hover disabled:bg-green-300",
+  danger: "bg-danger text-white hover:bg-danger-hover disabled:bg-rose-300",
+  success: "bg-success text-white hover:bg-success-hover disabled:bg-emerald-300",
   ghost: "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
 };
 
@@ -41,9 +41,14 @@ export function buttonClassName({
   className?: string;
 }) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors",
+    "inline-flex items-center justify-center gap-2 rounded-md font-medium",
+    "transition-[color,background-color,border-color,scale] duration-[180ms] ease-[var(--ease-motion)]",
     "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:focus:ring-offset-gray-900",
     "disabled:cursor-not-allowed",
+    // Press feedback. `disabled:active:scale-100` cancels it for a real
+    // disabled <button>; it's a no-op on LinkButton's <a> since anchors
+    // have no :disabled state to begin with.
+    "active:scale-[0.98] disabled:active:scale-100",
     variantClasses[variant],
     sizeClasses[size],
     className,

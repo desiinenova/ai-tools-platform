@@ -20,9 +20,9 @@ export interface ModalProps {
 
 const contentClassName: Record<NonNullable<ModalProps["variant"]>, string> = {
   center:
-    "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900",
+    "fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900 data-[state=open]:animate-modal-in data-[state=closed]:animate-modal-out",
   drawer:
-    "fixed inset-y-0 left-0 z-50 flex h-full w-72 max-w-[80vw] flex-col overflow-y-auto border-r border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900",
+    "fixed inset-y-0 left-0 z-50 flex h-full w-72 max-w-[80vw] flex-col overflow-y-auto border-r border-gray-200 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900 data-[state=open]:animate-drawer-in data-[state=closed]:animate-drawer-out",
 };
 
 export function Modal({
@@ -36,7 +36,7 @@ export function Modal({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out" />
         <Dialog.Content className={cn(contentClassName[variant])}>
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>

@@ -59,7 +59,7 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
         action={
           <Link
             href="/dashboard/tools"
-            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
           >
             Back to AI Tools
           </Link>
@@ -130,7 +130,7 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
             href={tool.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
           >
             Visit website
             <ExternalLink className="h-3.5 w-3.5" aria-hidden />
@@ -140,7 +140,7 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
               href={tool.documentation_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+              className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
             >
               <FileText className="h-3.5 w-3.5" aria-hidden />
               Documentation
@@ -161,7 +161,7 @@ export function ToolDetailsPage({ toolId }: ToolDetailsPageProps) {
                 "[&_ul]:mb-3 [&_ul]:list-disc [&_ul]:pl-5",
                 "[&_ol]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5",
                 "[&_li]:mb-1",
-                "[&_a]:text-blue-600 [&_a]:underline dark:[&_a]:text-blue-400",
+                "[&_a]:text-indigo-600 [&_a]:underline dark:[&_a]:text-indigo-400",
                 "[&_blockquote]:mb-3 [&_blockquote]:border-l-2 [&_blockquote]:border-gray-300 [&_blockquote]:pl-3 [&_blockquote]:text-gray-600 dark:[&_blockquote]:border-gray-700 dark:[&_blockquote]:text-gray-400",
                 "[&_code]:rounded [&_code]:bg-gray-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm dark:[&_code]:bg-gray-800",
                 "[&_pre]:mb-3 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:bg-gray-100 [&_pre]:p-3 [&_pre]:text-sm dark:[&_pre]:bg-gray-800",

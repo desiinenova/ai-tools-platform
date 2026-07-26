@@ -9,6 +9,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Single easing curve shared by every enter/exit animation (Modal, Drawer,
+     Toast) so motion feels like one system rather than per-component
+     tweaking. A standard "ease out" curve: quick start, gentle settle, no
+     overshoot/bounce. */
+  --ease-motion: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
@@ -22,20 +28,122 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Semantic aliases for the accent/success/danger colors already used ad hoc
-     (as plain "blue"/"green"/"red") across Button, Badge, and Toast. Same
-     values as today, so nothing changes visually yet — later phases can
-     migrate those components to reference these instead of a raw shade,
-     and re-pointing the value here becomes a single-place change. */
-  --color-accent: var(--color-blue-600);
-  --color-success: var(--color-green-600);
-  --color-danger: var(--color-red-600);
+  /* "Signal" brand accent — a distinctive indigo-blue rather than a stock
+     Tailwind shade, reserved for solid brand-colored fills (primary Button,
+     focus rings, the user avatar chip). Text-on-background uses elsewhere
+     (links, active-nav tints, badges) intentionally use Tailwind's own
+     `indigo-*` scale instead of this token, since Tailwind's stock shades
+     already have calibrated light/dark contrast pairs — this token is a
+     single fixed value, not a full ramp. */
+  --color-accent: #4f5bff;
+  --color-accent-hover: #4149e6;
 
-  /* Hover shades for the three colors above — Button's solid variants need
-     both a base and a hover tone. */
-  --color-accent-hover: var(--color-blue-700);
-  --color-success-hover: var(--color-green-700);
-  --color-danger-hover: var(--color-red-700);
+  /* Ambient glow color for the login page's background treatment only —
+     not used anywhere in the authenticated app. */
+  --color-accent-glow: var(--color-cyan-400);
+
+  --color-success: var(--color-emerald-500);
+  --color-success-hover: var(--color-emerald-600);
+  --color-danger: var(--color-rose-500);
+  --color-danger-hover: var(--color-rose-600);
+
+  /* Enter/exit animations for Modal (center + drawer variants) and Toast.
+     Same duration and easing (--ease-motion) across all of them so the
+     motion reads as one system. */
+  --animate-overlay-in: overlay-in 200ms var(--ease-motion);
+  --animate-overlay-out: overlay-out 200ms var(--ease-motion);
+  --animate-modal-in: modal-in 200ms var(--ease-motion);
+  --animate-modal-out: modal-out 200ms var(--ease-motion);
+  --animate-drawer-in: drawer-in 200ms var(--ease-motion);
+  --animate-drawer-out: drawer-out 200ms var(--ease-motion);
+  --animate-toast-in: toast-in 200ms var(--ease-motion);
+  --animate-toast-out: toast-out 200ms var(--ease-motion);
+  --animate-toast-swipe-out: toast-swipe-out 150ms var(--ease-motion) forwards;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes overlay-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Kept deliberately subtle per feedback: a barely-there scale so the modal
+   feels responsive rather than bouncy. Only `opacity`/`scale` are animated
+   (not `transform`) so this doesn't fight the Content's own
+   `-translate-x-1/2 -translate-y-1/2` centering utilities — Tailwind v4
+   generates those as the standalone `translate` property, independent of
+   `scale`. */
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+@keyframes modal-out {
+  to {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    translate: -100% 0;
+  }
+}
+
+@keyframes drawer-out {
+  to {
+    translate: -100% 0;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: 100% 0;
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    translate: 100% 0;
+  }
+}
+
+/* Swipe-to-dismiss follow-through: Radix sets data-swipe="end" once the
+   drag passes its threshold, exposing the release point via
+   --radix-toast-swipe-end-x so the exit continues from there instead of
+   snapping back to 0 first. */
+@keyframes toast-swipe-out {
+  from {
+    translate: var(--radix-toast-swipe-end-x) 0;
+  }
+  to {
+    opacity: 0;
+    translate: calc(var(--radix-toast-swipe-end-x) + 100%) 0;
+  }
+}
+
+/* Respect prefers-reduced-motion globally: animations still run (so Radix's
+   Presence, which waits for `animationend` before unmounting, still behaves
+   correctly) but are effectively instant. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {

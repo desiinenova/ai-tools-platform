@@ -109,7 +109,7 @@ export function ToolCard({ tool }: ToolCardProps) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+          className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
         >
           Visit website
           <ExternalLink className="h-3.5 w-3.5" aria-hidden />

@@ -18,7 +18,7 @@ export function StateMessage({ message, tone = "neutral", action, className }: S
       <p
         className={cn(
           "text-sm",
-          tone === "danger" ? "text-red-600 dark:text-red-400" : "text-gray-600 dark:text-gray-400",
+          tone === "danger" ? "text-rose-600 dark:text-rose-400" : "text-gray-600 dark:text-gray-400",
         )}
       >
         {message}

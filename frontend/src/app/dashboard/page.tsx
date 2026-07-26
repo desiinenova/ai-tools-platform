@@ -26,7 +26,7 @@ function StatCard({
 }) {
   return (
     <Card className="flex items-center gap-4">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
         <Icon className="h-5 w-5" aria-hidden />
       </div>
       <div>
@@ -94,7 +94,7 @@ export default function DashboardPage() {
             You haven&apos;t added any tools yet.{" "}
             <Link
               href="/dashboard/tools/new"
-              className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+              className="font-medium text-indigo-600 hover:underline dark:text-indigo-400"
             >
               Add one
             </Link>

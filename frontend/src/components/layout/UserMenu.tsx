@@ -45,7 +45,7 @@ export function UserMenu({ user }: UserMenuProps) {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white">
           {initials(user.name)}
         </span>
         <span className="hidden text-left sm:block">
@@ -74,7 +74,7 @@ export function UserMenu({ user }: UserMenuProps) {
           <DropdownMenu.Separator className="my-1 h-px bg-gray-200 dark:bg-gray-800" />
           <DropdownMenu.Item
             onSelect={handleLogout}
-            className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm text-red-600 outline-none data-[highlighted]:bg-red-50 dark:data-[highlighted]:bg-red-950"
+            className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm text-rose-600 outline-none data-[highlighted]:bg-rose-50 dark:data-[highlighted]:bg-rose-950"
           >
             <LogOut className="h-4 w-4" />
             Log out

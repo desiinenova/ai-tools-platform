@@ -33,8 +33,9 @@ export function useToast(): ToastContextValue {
 
 const variantStyles: Record<ToastVariant, string> = {
   success:
-    "border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950 dark:text-green-100",
-  error: "border-red-200 bg-red-50 text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-100",
+    "border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100",
+  error:
+    "border-rose-200 bg-rose-50 text-rose-900 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-100",
   info: "border-gray-200 bg-white text-gray-900 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100",
 };
 
@@ -71,6 +72,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               }}
               className={cn(
                 "flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg",
+                "data-[state=open]:animate-toast-in data-[state=closed]:animate-toast-out",
+                "data-[swipe=move]:[translate:var(--radix-toast-swipe-move-x)_0]",
+                "data-[swipe=cancel]:[translate:0_0] data-[swipe=cancel]:[transition:translate_200ms_var(--ease-motion)]",
+                "data-[swipe=end]:animate-toast-swipe-out",
                 variantStyles[variant],
               )}
             >

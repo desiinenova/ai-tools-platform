@@ -33,7 +33,7 @@ function NavLinks({ user, onNavigate }: { user: AuthUser; onNavigate?: () => voi
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
                 isActive
-                  ? "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                  ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
                   : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
               )}
             >

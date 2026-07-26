@@ -172,7 +172,7 @@ export function ToolForm({ mode, toolId }: ToolFormProps) {
         action={
           <Link
             href="/dashboard/tools"
-            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
           >
             Back to AI Tools
           </Link>
@@ -188,7 +188,7 @@ export function ToolForm({ mode, toolId }: ToolFormProps) {
         action={
           <Link
             href="/dashboard/tools"
-            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
           >
             Back to AI Tools
           </Link>

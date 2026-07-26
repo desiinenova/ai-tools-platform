@@ -50,7 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className={cn(
               "border-b-2 px-3 py-2 text-sm font-medium",
               pathname === tab.href
-                ? "border-blue-600 text-blue-700 dark:text-blue-400"
+                ? "border-indigo-600 text-indigo-700 dark:text-indigo-400"
                 : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100",
             )}
           >

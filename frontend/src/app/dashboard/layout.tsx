@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (error || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center p-8">
-        <p className="text-sm text-red-600">
+        <p className="text-sm text-rose-600 dark:text-rose-400">
           Something went wrong loading your account. Please try again.
         </p>
       </div>

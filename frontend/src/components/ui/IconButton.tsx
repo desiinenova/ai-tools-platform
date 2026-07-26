@@ -9,13 +9,17 @@ const variantClasses: Record<IconButtonVariant, string> = {
   default:
     "text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200",
   danger:
-    "text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-950 dark:hover:text-red-400",
+    "text-gray-500 hover:bg-rose-50 hover:text-rose-600 dark:text-gray-400 dark:hover:bg-rose-950 dark:hover:text-rose-400",
 };
 
 function iconButtonClassName(variant: IconButtonVariant, className?: string) {
   return cn(
-    "rounded p-1.5 transition-colors",
+    "rounded p-1.5",
+    "transition-[color,background-color,scale] duration-[180ms] ease-[var(--ease-motion)]",
     "focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:focus:ring-offset-gray-900",
+    // Press feedback, cancelled for a real disabled <button>; a no-op on
+    // IconLinkButton's <a>, which has no :disabled state to begin with.
+    "active:scale-[0.98] disabled:active:scale-100",
     variantClasses[variant],
     className,
   );
