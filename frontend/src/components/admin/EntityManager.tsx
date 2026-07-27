@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Tags, Trash2 } from "lucide-react";
 import { Button, Card, IconButton, Input, Modal, Spinner } from "@/components/ui";
+import { StateMessage } from "@/components/ui/StateMessage";
 import { useToast } from "@/components/ui/Toast";
 import { ApiError } from "@/lib/api";
 import type { ValidationErrorBody } from "@/types";
@@ -113,9 +114,7 @@ export function EntityManager<T extends NamedEntity>({
           </div>
         )}
         {!isLoading && (items?.length ?? 0) === 0 && (
-          <p className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-            No {entityLabelPlural} yet.
-          </p>
+          <StateMessage icon={Tags} message={`No ${entityLabelPlural} yet.`} className="py-12" />
         )}
         {items?.map((item) => (
           <div

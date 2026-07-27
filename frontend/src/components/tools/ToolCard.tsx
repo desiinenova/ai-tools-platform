@@ -45,7 +45,7 @@ export function ToolCard({ tool }: ToolCardProps) {
 
   return (
     <Card
-      className="flex cursor-pointer flex-col gap-3 transition-shadow hover:shadow-md"
+      className="flex cursor-pointer flex-col gap-3 outline-none hover:border-gray-300 hover:shadow-md active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 dark:hover:border-gray-700 dark:focus-visible:ring-offset-gray-950"
       role="button"
       tabIndex={0}
       onClick={goToDetails}

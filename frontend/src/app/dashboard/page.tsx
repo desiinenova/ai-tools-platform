@@ -31,7 +31,9 @@ function StatCard({
       </div>
       <div>
         <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-        <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">{value}</p>
+        <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900 dark:text-gray-100">
+          {value}
+        </p>
       </div>
     </Card>
   );

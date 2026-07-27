@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { ApiError } from "@/lib/api";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Topbar } from "@/components/layout/Topbar";
 import { Spinner } from "@/components/ui/Spinner";
 
@@ -40,12 +41,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-dvh overflow-hidden">
       <Sidebar user={user} mobileOpen={mobileNavOpen} onMobileOpenChange={setMobileNavOpen} />
-      <div className="flex flex-1 flex-col">
-        <Topbar user={user} onMenuClick={() => setMobileNavOpen(true)} />
-        <main className="flex-1 p-6">{children}</main>
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <Topbar onMenuClick={() => setMobileNavOpen(true)} />
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
+      <ThemeToggle />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { PackageSearch } from "lucide-react";
+import { StateMessage } from "@/components/ui/StateMessage";
 
 export interface ToolsEmptyStateProps {
   hasActiveFilters: boolean;
@@ -6,16 +7,15 @@ export interface ToolsEmptyStateProps {
 
 export function ToolsEmptyState({ hasActiveFilters }: ToolsEmptyStateProps) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-gray-300 py-16 text-center dark:border-gray-700">
-      <PackageSearch className="h-8 w-8 text-gray-400" aria-hidden />
-      <p className="font-medium text-gray-900 dark:text-gray-100">
-        {hasActiveFilters ? "No tools match these filters" : "No tools yet"}
-      </p>
-      <p className="text-sm text-gray-500 dark:text-gray-400">
-        {hasActiveFilters
+    <StateMessage
+      icon={PackageSearch}
+      title={hasActiveFilters ? "No tools match these filters" : "No tools yet"}
+      message={
+        hasActiveFilters
           ? "Try adjusting or clearing your filters."
-          : "Once tools are added, they'll show up here."}
-      </p>
-    </div>
+          : "Once tools are added, they'll show up here."
+      }
+      className="rounded-xl border border-dashed border-gray-300 dark:border-gray-700"
+    />
   );
 }

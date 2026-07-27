@@ -20,7 +20,7 @@ export function ThemeToggle() {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
-    return <div className="h-9 w-9" aria-hidden />;
+    return <div className="fixed bottom-4 right-4 z-40 h-9 w-9" aria-hidden />;
   }
 
   const CurrentIcon = resolvedTheme === "dark" ? Moon : Sun;
@@ -29,13 +29,14 @@ export function ThemeToggle() {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
         aria-label="Change theme"
-        className="rounded-md p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+        className="fixed bottom-4 right-4 z-40 rounded-full border border-gray-200 bg-white p-2 text-gray-600 shadow-md hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
       >
         <CurrentIcon className="h-5 w-5" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          align="start"
+          side="top"
+          align="end"
           sideOffset={8}
           className="z-50 w-36 rounded-md border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-800 dark:bg-gray-900"
         >

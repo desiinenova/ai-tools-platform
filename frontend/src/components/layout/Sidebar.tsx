@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "@/lib/navigation";
 import { Modal } from "@/components/ui/Modal";
+import { UserMenu } from "./UserMenu";
 import { cn } from "@/lib/cn";
 import type { AuthUser } from "@/types";
 
@@ -31,10 +32,10 @@ function NavLinks({ user, onNavigate }: { user: AuthUser; onNavigate?: () => voi
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
+                "flex items-center gap-3 rounded-md border-l-2 py-2 pl-[10px] pr-3 text-sm font-medium",
                 isActive
-                  ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
-                  : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
+                  ? "border-accent bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
+                  : "border-transparent text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
               )}
             >
               <Icon className="h-4 w-4" aria-hidden />
@@ -46,18 +47,44 @@ function NavLinks({ user, onNavigate }: { user: AuthUser; onNavigate?: () => voi
   );
 }
 
+function SidebarFooter({ user, onNavigate }: { user: AuthUser; onNavigate?: () => void }) {
+  return (
+    <div className="shrink-0 border-t border-gray-200 pt-3 dark:border-gray-800">
+      <UserMenu user={user} onNavigate={onNavigate} />
+    </div>
+  );
+}
+
 export function Sidebar({ user, mobileOpen, onMobileOpenChange }: SidebarProps) {
   return (
     <>
-      <aside className="hidden w-60 shrink-0 border-r border-gray-200 p-4 dark:border-gray-800 md:block">
-        <div className="mb-6 px-3 text-lg font-semibold text-gray-900 dark:text-gray-100">
+      {/* Full-height flex column: brand and footer are fixed; only the nav
+          list (flex-1 + overflow-y-auto) scrolls if it ever outgrows the
+          viewport, so the user menu stays pinned in view regardless of the
+          page's own scroll position.
+
+          Same surface as the page (bg-[var(--background)], not a distinct
+          color) — the app reads as one continuous canvas, with only the
+          border-r marking where nav ends and content begins. NavLinks'
+          indigo active-state + left accent bar are what carry "where you
+          are" now, not a different sidebar background. */}
+      <aside className="hidden w-60 shrink-0 flex-col border-r border-gray-200 bg-[var(--background)] p-4 dark:border-gray-800 md:flex">
+        <div className="mb-6 shrink-0 px-2.5 text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
           AI Tools Platform
         </div>
-        <NavLinks user={user} />
+        <div className="flex-1 overflow-y-auto">
+          <NavLinks user={user} />
+        </div>
+        <SidebarFooter user={user} />
       </aside>
 
       <Modal open={mobileOpen} onOpenChange={onMobileOpenChange} title="Menu" variant="drawer">
-        <NavLinks user={user} onNavigate={() => onMobileOpenChange(false)} />
+        <div className="flex flex-1 flex-col">
+          <div className="flex-1 overflow-y-auto">
+            <NavLinks user={user} onNavigate={() => onMobileOpenChange(false)} />
+          </div>
+          <SidebarFooter user={user} onNavigate={() => onMobileOpenChange(false)} />
+        </div>
       </Modal>
     </>
   );

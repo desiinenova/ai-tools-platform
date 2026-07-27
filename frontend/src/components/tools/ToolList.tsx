@@ -40,7 +40,7 @@ export function ToolList({
       <StateMessage
         tone="danger"
         message="Something went wrong loading tools."
-        className="rounded-lg border border-dashed border-rose-300 dark:border-rose-900"
+        className="rounded-xl border border-dashed border-rose-300 dark:border-rose-900"
         action={
           <Button variant="secondary" size="sm" onClick={onRetry}>
             Retry

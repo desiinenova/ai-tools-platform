@@ -7,7 +7,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
+  /* A visibly cool-toned canvas (not near-white slate-50) so white Card
+     surfaces read as a distinctly brighter layer on top of it, rather than
+     blending in. */
+  --background: var(--color-slate-100);
   --foreground: #171717;
 
   /* Single easing curve shared by every enter/exit animation (Modal, Drawer,
@@ -18,7 +21,10 @@
 }
 
 .dark {
-  --background: #0a0a0a;
+  /* A genuinely dark *blue*-black (slate-950) instead of a flat, hueless
+     near-black — closer in spirit to the login page's own #0B0E16, so dark
+     mode echoes the same brand identity instead of using an unrelated gray. */
+  --background: var(--color-slate-950);
   --foreground: #ededed;
 }
 
@@ -27,6 +33,26 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* The authenticated app's entire neutral system, remapped in one place:
+     every existing gray-* utility (borders, muted text, surfaces, hover
+     states — the vast majority of the UI kit) now resolves to Tailwind's
+     slate scale instead of true zero-hue gray. Slate leans toward the same
+     cool/blue family as the Signal accent, so the whole app reads as one
+     continuous, deliberately-chosen palette instead of "branded login +
+     default-gray CRUD everywhere else." No component files change — this
+     is what makes it a system-wide fix rather than a per-page one. */
+  --color-gray-50: var(--color-slate-50);
+  --color-gray-100: var(--color-slate-100);
+  --color-gray-200: var(--color-slate-200);
+  --color-gray-300: var(--color-slate-300);
+  --color-gray-400: var(--color-slate-400);
+  --color-gray-500: var(--color-slate-500);
+  --color-gray-600: var(--color-slate-600);
+  --color-gray-700: var(--color-slate-700);
+  --color-gray-800: var(--color-slate-800);
+  --color-gray-900: var(--color-slate-900);
+  --color-gray-950: var(--color-slate-950);
 
   /* "Signal" brand accent — a distinctive indigo-blue rather than a stock
      Tailwind shade, reserved for solid brand-colored fills (primary Button,

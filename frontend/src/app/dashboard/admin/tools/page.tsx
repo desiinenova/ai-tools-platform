@@ -1,7 +1,9 @@
 "use client";
 
+import { Inbox } from "lucide-react";
 import { PendingToolCard } from "@/components/admin/PendingToolCard";
 import { Spinner } from "@/components/ui/Spinner";
+import { StateMessage } from "@/components/ui/StateMessage";
 import { usePendingTools } from "@/lib/hooks/useTools";
 
 export default function AdminPendingToolsPage() {
@@ -15,9 +17,7 @@ export default function AdminPendingToolsPage() {
         </div>
       )}
       {!isLoading && (tools?.length ?? 0) === 0 && (
-        <p className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-          No tools awaiting review.
-        </p>
+        <StateMessage icon={Inbox} message="No tools awaiting review." className="py-12" />
       )}
 
       {tools?.map((tool) => (
